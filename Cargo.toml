@@ -7,3 +7,11 @@ edition = "2021"
 
 [dependencies]
 nannou = "0.18.1"
+
+[[example]]
+name = "hello-world"
+path = "hello-world/hello-world.rs"
+
+[[example]]
+name = "mouse-event"
+path = "mouse-event/mouse-event.rs"
