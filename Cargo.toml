@@ -18,3 +18,11 @@ path = "hello-world/hello-world.rs"
 [[example]]
 name = "mouse-event"
 path = "mouse-event/mouse-event.rs"
+
+[[example]]
+name = "basics-functions"
+path = "basics-functions/basics-functions.rs"
+
+[[example]]
+name = "basics-input"
+path = "basics-input/basics-input.rs"
