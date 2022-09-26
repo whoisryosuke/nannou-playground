@@ -27,7 +27,7 @@ fn model(_app: &App) -> Model {
         // Create a new particle
         let mut particle = Particle::new(COLORS[particle_color_id]);
 
-        particle.position = pt2(random_range(0.0, 100.0), random_range(0.0, 100.0));
+        particle.position = pt2(random_range(-200.0, 500.0), random_range(-200.0, 500.0));
         particles.push(particle);
 
         i += 1;
@@ -39,18 +39,21 @@ fn model(_app: &App) -> Model {
 
 // By default, `update` is called right before `view` is called each frame.
 fn update(app: &App, model: &mut Model, _update: Update) {
+    // The "time" variable, created by measuring frame count
     //the loop is going to be 200 frames long
     let frac = (app.elapsed_frames() % 200) as f32 / (200.0);
 
-    // model.ball.position = pt2(app.mouse.x, app.mouse.y);
-
-    let movement = 0.2 * (frac * TAU).cos();
-
     // Move the particles
+    // Note that we have to create a mutable variable here (&mut)
     for particle in &mut model.particles {
+        // Rotate in a circle using sin + cos (and the time from above)
+        let movement = random_range(0.1, 2.0) * (frac * TAU).sin();
+        let movement_left = random_range(0.1, 2.0) * (frac * TAU).cos();
+
+        // Mutate position of particle
         particle.position = pt2(
             particle.position.x + movement,
-            particle.position.y + movement,
+            particle.position.y + movement_left,
         );
     }
 }
