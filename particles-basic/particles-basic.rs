@@ -17,9 +17,9 @@ struct Model {
 
 fn model(_app: &App) -> Model {
     let mut particles: Vec<Particle> = Vec::new();
-    let mut i = 0;
 
-    while i < NUM_PARTICLES {
+    for i in 0..NUM_PARTICLES {
+        // while i < NUM_PARTICLES {
         // Use index to pick a random color from array
         // We convert the i32 to usize (array index) by using `.try_into().unwrap()` and typing the `let` with `usize`
         let particle_color_id: usize = (i % 6).try_into().unwrap();
@@ -29,8 +29,6 @@ fn model(_app: &App) -> Model {
 
         particle.position = pt2(random_range(-200.0, 500.0), random_range(-200.0, 500.0));
         particles.push(particle);
-
-        i += 1;
     }
 
     // Construct and return the model with our initialised ball
