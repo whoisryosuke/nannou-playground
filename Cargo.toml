@@ -26,3 +26,11 @@ path = "basics-functions/basics-functions.rs"
 [[example]]
 name = "basics-input"
 path = "basics-input/basics-input.rs"
+
+[[example]]
+name = "module-example"
+path = "module-example/module-example.rs"
+
+[[example]]
+name = "particles-basic"
+path = "particles-basic/particles-basic.rs"
