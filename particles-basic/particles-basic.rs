@@ -28,6 +28,7 @@ fn model(_app: &App) -> Model {
         let mut particle = Particle::new(COLORS[particle_color_id]);
 
         particle.position = pt2(random_range(-200.0, 500.0), random_range(-200.0, 500.0));
+        particle.radius = random_range(5.0, 100.0);
         particles.push(particle);
     }
 
