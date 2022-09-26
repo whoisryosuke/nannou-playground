@@ -39,7 +39,20 @@ fn model(_app: &App) -> Model {
 
 // By default, `update` is called right before `view` is called each frame.
 fn update(app: &App, model: &mut Model, _update: Update) {
+    //the loop is going to be 200 frames long
+    let frac = (app.elapsed_frames() % 200) as f32 / (200.0);
+
     // model.ball.position = pt2(app.mouse.x, app.mouse.y);
+
+    let movement = 0.2 * (frac * TAU).cos();
+
+    // Move the particles
+    for particle in &mut model.particles {
+        particle.position = pt2(
+            particle.position.x + movement,
+            particle.position.y + movement,
+        );
+    }
 }
 
 fn view(app: &App, model: &Model, frame: Frame) {
@@ -47,7 +60,7 @@ fn view(app: &App, model: &Model, frame: Frame) {
     let draw = app.draw();
     // Draw dark gray for the background
     draw.background().color(DIMGRAY);
-    // Draw our ball
+    // Draw our particles
     for particle in &model.particles {
         particle.display(&draw);
     }
