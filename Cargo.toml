@@ -41,5 +41,9 @@ name = "particles-water"
 path = "particles-water/particles-water.rs"
 
 [[example]]
+name = "particles-lines"
+path = "particles-lines/particles-lines.rs"
+
+[[example]]
 name = "egui-example"
 path = "ui/egui-example/egui-example.rs"

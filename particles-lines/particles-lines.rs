@@ -4,7 +4,7 @@ use nannou::noise::*;
 use nannou::prelude::*;
 use nannou_egui::{self, egui, Egui};
 
-const NUM_PARTICLES: i32 = 100;
+const NUM_PARTICLES: i32 = 1000;
 const COLORS: [rgb::Rgb<nannou::color::encoding::Srgb, u8>; 6] =
     [BLUE, DARKBLUE, DARKSLATEBLUE, DARKCYAN, CYAN, SLATEBLUE];
 
@@ -53,9 +53,10 @@ fn model(app: &App) -> Model {
         let particle_color_id: usize = (i % 6).try_into().unwrap();
 
         // Create a new particle
-        let mut particle = Particle::new(COLORS[particle_color_id]);
-
-        particle.position = pt2(random_range(-400.0, 400.0), random_range(-400.0, 400.0));
+        let mut particle = Particle::new(
+            COLORS[particle_color_id],
+            vec2(random_range(-400.0, 400.0), random_range(-400.0, 400.0)),
+        );
         particle.radius = random_range(5.0, 30.0);
         particles.push(particle);
     }
@@ -67,7 +68,7 @@ fn model(app: &App) -> Model {
         egui,
         settings: Settings {
             resolution: 10,
-            scale: 200.0,
+            scale: 0.01,
             rotation: 0.0,
             color: WHITE,
             position: vec2(0.0, 0.0),
@@ -86,19 +87,19 @@ fn update(_app: &App, model: &mut Model, update: Update) {
 
     egui::Window::new("Settings").show(&ctx, |ui| {
         // Resolution slider
-        ui.label("Resolution:");
-        ui.add(egui::Slider::new(&mut settings.resolution, 1..=40));
+        // ui.label("Resolution:");
+        // ui.add(egui::Slider::new(&mut settings.resolution, 1..=40));
 
         // Scale slider
         ui.label("Scale:");
-        ui.add(egui::Slider::new(&mut settings.scale, 0.0..=1000.0));
+        ui.add(egui::Slider::new(&mut settings.scale, 0.01..=0.05));
 
         // Rotation slider
-        ui.label("Rotation:");
-        ui.add(egui::Slider::new(&mut settings.rotation, 0.0..=360.0));
+        // ui.label("Rotation:");
+        // ui.add(egui::Slider::new(&mut settings.rotation, 0.0..=360.0));
 
         // Random color button
-        let clicked = ui.button("Random color").clicked();
+        let clicked = ui.button("Reset").clicked();
 
         if clicked {
             settings.color = rgb(random(), random(), random());
@@ -111,18 +112,20 @@ fn update(_app: &App, model: &mut Model, update: Update) {
         // let movement = random_range(-0.5, 0.5);
         // let movement_left = random_range(-0.5, 0.5);
         let scale = 0.005;
+        let prev_position = particle.positions[0];
         let movement = model.noise.get([
-            scale * particle.position.x.to_f64().unwrap(),
-            scale * particle.position.y.to_f64().unwrap(),
+            (model.settings.scale * prev_position.x) as f64,
+            (model.settings.scale * prev_position.y) as f64,
             0.0,
         ]);
         let movement_left = model.noise.get([
-            scale * particle.position.x.to_f64().unwrap(),
-            scale * particle.position.y.to_f64().unwrap(),
+            (model.settings.scale * prev_position.x) as f64,
+            (model.settings.scale * prev_position.y) as f64,
             1.0,
         ]);
+        let new_position = prev_position + vec2(movement as f32, movement_left as f32);
         // Mutate position of particle
-        particle.position += vec2(movement.to_f32().unwrap(), movement_left.to_f32().unwrap());
+        particle.positions.insert(0, new_position);
     }
 }
 
@@ -144,8 +147,14 @@ fn view(app: &App, model: &Model, frame: Frame) {
 
     // Draw our particles
     for particle in &model.particles {
-        particle.display(&draw);
+        draw.polyline()
+            .points(particle.positions.iter().cloned())
+            .color(BLUE);
     }
+
+    // draw.polyline()
+    //     .points(model.particles[0].positions.iter().cloned())
+    //     .color(BLUE);
 
     draw.to_frame(app, &frame).unwrap();
     model.egui.draw_to_frame(&frame).unwrap();
