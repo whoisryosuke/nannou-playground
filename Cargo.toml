@@ -47,3 +47,15 @@ path = "particles-lines/particles-lines.rs"
 [[example]]
 name = "egui-example"
 path = "ui/egui-example/egui-example.rs"
+
+[[example]]
+name = "texture-sampler"
+path = "textures/texture_sampler.rs"
+
+[[example]]
+name = "texture-sampler2"
+path = "textures/texture_sampler2.rs"
+
+[[example]]
+name = "texture-simple"
+path = "textures/texture_simple.rs"
